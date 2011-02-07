@@ -32,7 +32,7 @@ CC = g++
 #------------------------------------------------------------------------------#
 
 # -I"$(PD_INCLUDE)/pd" supports the header location for 0.43
-CFLAGS = -I"$(PD_INCLUDE)/pd" -Wall -W -g
+CFLAGS = -I"$(PD_INCLUDE)/pd"  -I"$(PD_INCLUDE)/pdextended" -Wall -W -g
 LDFLAGS = 
 LIBS =
 
