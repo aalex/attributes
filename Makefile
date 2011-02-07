@@ -5,7 +5,7 @@ LIBRARY_NAME = attributes
 
 # add your .c source files, one object per file, to the SOURCES
 # variable, help files will be included automatically
-SOURCES = attributes.cpp
+SOURCES = attributes.c
 
 # list all pd objects (i.e. myobject.pd) files here, and their helpfiles will
 # be included automatically
@@ -197,25 +197,25 @@ ifeq (MINGW,$(findstring MINGW,$(UNAME)))
 endif
 
 # in case somebody manually set the HELPPATCHES above
-HELPPATCHES ?= $(SOURCES:.cpp=-help.pd) $(PDOBJECTS:.pd=-help.pd)
+HELPPATCHES ?= $(SOURCES:.c=-help.pd) $(PDOBJECTS:.pd=-help.pd)
 
 CFLAGS += $(OPT_CFLAGS)
 
 
 .PHONY = install libdir_install single_install install-doc install-exec install-examples install-manual clean dist etags $(LIBRARY_NAME)
 
-all: $(SOURCES:.cpp=.$(EXTENSION))
+all: $(SOURCES:.c=.$(EXTENSION))
 
-%.o: %.cpp
-	$(CC) $(CFLAGS) -o "$*.o" -c "$*.cpp"
+%.o: %.c
+	$(CC) $(CFLAGS) -o "$*.o" -c "$*.c"
 
 %.$(EXTENSION): %.o
 	$(CC) $(LDFLAGS) -o "$*.$(EXTENSION)" "$*.o"  $(LIBS)
 	chmod a-x "$*.$(EXTENSION)"
 
 # this links everything into a single binary file
-$(LIBRARY_NAME): $(SOURCES:.cpp=.o) $(LIBRARY_NAME).o
-	$(CC) $(LDFLAGS) -o $(LIBRARY_NAME).$(EXTENSION) $(SOURCES:.cpp=.o) $(LIBRARY_NAME).o $(LIBS)
+$(LIBRARY_NAME): $(SOURCES:.c=.o) $(LIBRARY_NAME).o
+	$(CC) $(LDFLAGS) -o $(LIBRARY_NAME).$(EXTENSION) $(SOURCES:.c=.o) $(LIBRARY_NAME).o $(LIBS)
 	chmod a-x $(LIBRARY_NAME).$(EXTENSION)
 
 install: libdir_install
@@ -227,8 +227,8 @@ libdir_install: $(SOURCES:.c=.$(EXTENSION)) install-doc install-examples install
 	$(INSTALL_DATA) $(LIBRARY_NAME)-meta.pd \
 		$(DESTDIR)$(objectsdir)/$(LIBRARY_NAME)
 	test -z "$(strip $(SOURCES))" || (\
-		$(INSTALL_PROGRAM) $(SOURCES:.cpp=.$(EXTENSION)) $(DESTDIR)$(objectsdir)/$(LIBRARY_NAME) && \
-		$(STRIP) $(addprefix $(DESTDIR)$(objectsdir)/$(LIBRARY_NAME)/,$(SOURCES:.cpp=.$(EXTENSION))))
+		$(INSTALL_PROGRAM) $(SOURCES:.c=.$(EXTENSION)) $(DESTDIR)$(objectsdir)/$(LIBRARY_NAME) && \
+		$(STRIP) $(addprefix $(DESTDIR)$(objectsdir)/$(LIBRARY_NAME)/,$(SOURCES:.c=.$(EXTENSION))))
 	test -z "$(strip $(PDOBJECTS))" || \
 		$(INSTALL_DATA) $(PDOBJECTS) \
 			$(DESTDIR)$(objectsdir)/$(LIBRARY_NAME)
@@ -263,8 +263,8 @@ install-manual:
 
 
 clean:
-	-rm -f -- $(SOURCES:.cpp=.o) $(SOURCES_LIB:.cpp=.o)
-	-rm -f -- $(SOURCES:.cpp=.$(EXTENSION))
+	-rm -f -- $(SOURCES:.c=.o) $(SOURCES_LIB:.c=.o)
+	-rm -f -- $(SOURCES:.c=.$(EXTENSION))
 	-rm -f -- $(LIBRARY_NAME).o
 	-rm -f -- $(LIBRARY_NAME).$(EXTENSION)
 
