@@ -1,0 +1,6 @@
+#N canvas 15 49 200 200 10;
+#N canvas 718 357 420 300 META 0;
+#X text 10 10 VERSION 0.1.0;
+#X text 10 25 AUTHOR alexandre@quessy.net;
+#X text 13 41 NAME attributes;
+#X restore 10 10 pd META;
