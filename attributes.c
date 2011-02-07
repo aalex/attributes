@@ -34,7 +34,6 @@
 
 #include "m_pd.h"
 #include "g_canvas.h"
-#include <stdio.h>
 
 #define IS_A_POINTER(atom,index) ((atom+index)->a_type == A_POINTER)
 #define IS_A_FLOAT(atom,index) ((atom+index)->a_type == A_FLOAT)
@@ -106,7 +105,7 @@ static void attributes_free(t_attributes *x)
 
 static void *attributes_new(void)
 {
-    printf("New [attributes]\n");
+    post("New [attributes]");
     t_attributes *x = (t_attributes *) pd_new(attributes_class);
     t_glist *glist = (t_glist *)canvas_getcurrent();
     t_canvas *canvas = glist_getcanvas(glist);
@@ -132,8 +131,8 @@ void attributes_setup(void)
     attributes_class = class_new(gensym("attributes"), (t_newmethod)attributes_new, (t_method)attributes_free, sizeof(t_attributes), CLASS_DEFAULT, A_GIMME, 0);
     class_addbang(attributes_class, (t_method) attributes_bang);
     class_addfloat(attributes_class, (t_method) attributes_float);
-    printf("[attributes] Parses attributes as arguments to an abstractions\n");
-    printf("Copyright (C) 2000-2006 Thomas MUSIL [musil_at_iem.at]\n");
-    printf("Copyright (C) 2011 Alexandre Quessy <alexandre@quessy.net>\n");
+    post("[attributes] Parses attributes as arguments to an abstractions");
+    post("Copyright (C) 2000-2006 Thomas MUSIL [musil_at_iem.at]");
+    post("Copyright (C) 2011 Alexandre Quessy <alexandre@quessy.net>");
 }
 
