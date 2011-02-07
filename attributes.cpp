@@ -34,16 +34,30 @@
 
 #include "m_pd.h"
 #include "g_canvas.h"
+#include <stdio.h>
+
+#define IS_A_POINTER(atom,index) ((atom+index)->a_type == A_POINTER)
+#define IS_A_FLOAT(atom,index) ((atom+index)->a_type == A_FLOAT)
+#define IS_A_SYMBOL(atom,index) ((atom+index)->a_type == A_SYMBOL)
+#define IS_A_DOLLAR(atom,index) ((atom+index)->a_type == A_DOLLAR)
+#define IS_A_DOLLSYM(atom,index) ((atom+index)->a_type == A_DOLLSYM)
+#define IS_A_SEMI(atom,index) ((atom+index)->a_type == A_SEMI)
+#define IS_A_COMMA(atom,index) ((atom+index)->a_type == A_COMMA)
+
+
 
 static t_class *attributes_class;
 
 typedef struct _attributes
 {
-    t_object  x_obj;
-    void      *x_outlet_ac;
-    t_atom    *x_at;
-    int       x_ac;
+    t_object x_obj;
+    t_outlet *x_outlet_ac;
+    t_atom *x_at;
+    int x_ac;
 } t_attributes;
+
+
+extern "C" {
 
 static void attributes_float(t_attributes *x, t_floatarg f)
 {
@@ -59,9 +73,9 @@ static void attributes_float(t_attributes *x, t_floatarg f)
         if(i <= x->x_ac)
         {
             outlet_float(x->x_outlet_ac, i);
-            if(IS_A_FLOAT(x->x_at, i-1))
+            if (IS_A_FLOAT(x->x_at, i-1))
                 outlet_float(x->x_obj.ob_outlet, atom_getfloatarg(i-1, x->x_ac, x->x_at));
-            else if(IS_A_SYMBOL(x->x_at, i-1))
+            else if (IS_A_SYMBOL(x->x_at, i-1))
                 outlet_symbol(x->x_obj.ob_outlet, atom_getsymbolarg(i-1, x->x_ac, x->x_at));
         }
         else
@@ -74,9 +88,9 @@ static void attributes_float(t_attributes *x, t_floatarg f)
         if(j >= 0)
         {
             outlet_float(x->x_outlet_ac, j+1);
-            if(IS_A_FLOAT(x->x_at, j))
+            if (IS_A_FLOAT(x->x_at, j))
                 outlet_float(x->x_obj.ob_outlet, atom_getfloatarg(j, x->x_ac, x->x_at));
-            else if(IS_A_SYMBOL(x->x_at, j))
+            else if (IS_A_SYMBOL(x->x_at, j))
                 outlet_symbol(x->x_obj.ob_outlet, atom_getsymbolarg(j, x->x_ac, x->x_at));
         }
         else
@@ -97,6 +111,7 @@ static void attributes_free(t_attributes *x)
 
 static void *attributes_new(void)
 {
+    printf("New [attributes]\n");
     t_attributes *x = (t_attributes *) pd_new(attributes_class);
     t_glist *glist = (t_glist *)canvas_getcurrent();
     t_canvas *canvas = glist_getcanvas(glist);
@@ -111,7 +126,7 @@ static void *attributes_new(void)
     x->x_ac = pargc;
     at = x->x_at;
     while (pargc--)
-      *at++ = *pargv++;
+        *at++ = *pargv++;
     outlet_new(&x->x_obj, &s_list);
     x->x_outlet_ac = outlet_new(&x->x_obj, &s_float);
     return x;
@@ -119,9 +134,12 @@ static void *attributes_new(void)
 
 void attributes_setup(void)
 {
-    attributes_class = class_new(gensym("attributes"), (t_newmethod)attributes_new, (t_method)attributes_free, sizeof(t_attributes), 0, 0);
-    class_addcreator( (t_newmethod) attributes_new, gensym("$n"), 0);
+    attributes_class = class_new(gensym("attributes"), (t_newmethod)attributes_new, (t_method)attributes_free, sizeof(t_attributes), CLASS_DEFAULT, A_GIMME, 0);
     class_addbang(attributes_class, (t_method) attributes_bang);
     class_addfloat(attributes_class, (t_method) attributes_float);
+    printf("[attributes] Parses attributes as arguments to an abstractions\n");
+    printf("Copyright (C) 2000-2006 Thomas MUSIL [musil_at_iem.at]\n");
+    printf("Copyright (C) 2011 Alexandre Quessy <alexandre@quessy.net>\n");
 }
 
+}
