@@ -44,8 +44,6 @@
 #define IS_A_SEMI(atom,index) ((atom+index)->a_type == A_SEMI)
 #define IS_A_COMMA(atom,index) ((atom+index)->a_type == A_COMMA)
 
-
-
 static t_class *attributes_class;
 
 typedef struct _attributes
@@ -55,9 +53,6 @@ typedef struct _attributes
     t_atom *x_at;
     int x_ac;
 } t_attributes;
-
-
-extern "C" {
 
 static void attributes_float(t_attributes *x, t_floatarg f)
 {
@@ -142,4 +137,3 @@ void attributes_setup(void)
     printf("Copyright (C) 2011 Alexandre Quessy <alexandre@quessy.net>\n");
 }
 
-}
