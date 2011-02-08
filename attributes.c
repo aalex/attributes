@@ -48,6 +48,10 @@ typedef struct _attributes
     int x_ac;
 } t_attributes;
 
+/**
+ * Either send it 0.0f or a bang, and it outputs the whole list of arguments it got.
+ */
+
 static void attributes_float(t_attributes *x, t_floatarg f)
 {
     int i = (int) f;
