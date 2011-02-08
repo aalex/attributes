@@ -35,13 +35,8 @@
 #include "m_pd.h"
 #include "g_canvas.h"
 
-#define IS_A_POINTER(atom,index) ((atom+index)->a_type == A_POINTER)
 #define IS_A_FLOAT(atom,index) ((atom+index)->a_type == A_FLOAT)
 #define IS_A_SYMBOL(atom,index) ((atom+index)->a_type == A_SYMBOL)
-#define IS_A_DOLLAR(atom,index) ((atom+index)->a_type == A_DOLLAR)
-#define IS_A_DOLLSYM(atom,index) ((atom+index)->a_type == A_DOLLSYM)
-#define IS_A_SEMI(atom,index) ((atom+index)->a_type == A_SEMI)
-#define IS_A_COMMA(atom,index) ((atom+index)->a_type == A_COMMA)
 
 static t_class *attributes_class;
 
@@ -107,7 +102,7 @@ static void *attributes_new(void)
 {
     post("New [attributes]");
     t_attributes *x = (t_attributes *) pd_new(attributes_class);
-    t_glist *glist = (t_glist *)canvas_getcurrent();
+    t_glist *glist = (t_glist *) canvas_getcurrent();
     t_canvas *canvas = glist_getcanvas(glist);
     int pargc;
     t_atom *pargv;
